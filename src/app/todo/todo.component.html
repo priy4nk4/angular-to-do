@@ -1,0 +1,25 @@
+<form class="form-wrapper" (submit)="addItem()" #f="ngForm">
+  <input type="text" placeholder="add todos.." name="title" class="form-control" (change)="onInputValueChanged($event)" ngModel>
+  <div>
+    <button type="submit" class="btn btn-success">submit</button>
+  </div>
+</form>
+
+<div *ngIf="itemList.length">
+  <div *ngFor="let item of itemList; let i=index">
+    <div class="list-wrapper mt-4">
+      <input type="checkbox" [checked]="item.isDone" (change)="updateItem($event, i)">
+      <p [ngClass]="item.isDone? 'my_class1': 'my_class2'">{{item.title}}</p>
+      <button type="button" class="btn btn-danger" (click)="removeItem(i)">Delete</button>
+    </div>
+
+  </div>
+  <hr/>
+
+</div>
+
+<div *ngIf ="completedTask.length">
+  <ol>
+    <li  *ngFor="let item of completedTask">{{item.title}}</li>
+  </ol>
+</div>
