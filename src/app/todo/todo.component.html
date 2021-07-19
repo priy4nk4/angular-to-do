@@ -1,7 +1,7 @@
 <form class="form-wrapper" (submit)="addItem()" #f="ngForm">
   <input type="text" placeholder="add todos.." name="title" class="form-control" (change)="onInputValueChanged($event)" ngModel>
   <div>
-    <button type="submit" class="btn btn-success">submit</button>
+    <button type="submit" class="btn btn-success" [disabled]="!isInputValid">submit</button>
   </div>
 </form>
 
@@ -10,6 +10,19 @@
     <div class="list-wrapper mt-4">
       <input type="checkbox" [checked]="item.isDone" (change)="updateItem($event, i)">
       <p [ngClass]="item.isDone? 'my_class1': 'my_class2'">{{item.title}}</p>
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle"
+                [ngClass]="item.tag== 'work'? 'work': (item.tag== 'important'? 'important': 'default') "
+                type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          {{item.tag}}
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item" (click)="updateTag(i, tag.title)" *ngFor="let tag of tags">{{tag.title}}</a></li>
+
+        </ul>
+      </div>
+<!--      <button type="button" (click)="assignTask(item)">assign</button>-->
+
       <button type="button" class="btn btn-danger" (click)="removeItem(i)">Delete</button>
     </div>
 
@@ -19,6 +32,7 @@
 </div>
 
 <div *ngIf ="completedTask.length">
+  <h2>Completed (Item)s</h2>
   <ol>
     <li  *ngFor="let item of completedTask">{{item.title}}</li>
   </ol>
