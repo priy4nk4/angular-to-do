@@ -8,6 +8,7 @@ The project is a todo app built on Angular where:
   - Users can delete tasks
   - Users can mark a task as completed
   - Users can add colored-tag to the tasks
+  - Users can create their own tags
   - Users can see the list of completed tasks in a separate section
 
 ## What have I used in this project?
