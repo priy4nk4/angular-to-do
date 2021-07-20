@@ -1,7 +1,7 @@
 import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {todoItemModel} from '../model/todoItem.model';
 import {TagModel} from '../model/tag.model';
-import { faCoffee , faPlus, faCheckCircle} from '@fortawesome/free-solid-svg-icons';
+import { faCoffee , faPlus, faCheckCircle, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 import * as $ from 'jquery';
 
 @Component({
@@ -19,6 +19,7 @@ export class TodoComponent implements OnInit {
   faCoffee = faCoffee;
   faPlus = faPlus;
   faCheckCircle = faCheckCircle;
+  faTrashAlt = faTrashAlt;
   isNewTag: boolean = false;
   newTag!: string;
   activeTab: string = "active";
@@ -43,8 +44,11 @@ export class TodoComponent implements OnInit {
   }
 
   addItem() {
-    this.activeList.push({title: this.form.value.title, isDone: false, tag: []})
-    this.form.reset();
+    let title = this.form.value.title.trim();
+    if (title.length && this.form.valid) {
+      this.activeList.push({title: this.form.value.title, isDone: false, tag: []})
+      this.form.reset();
+    }
   }
 
   updateItem(event: any, index: number) {

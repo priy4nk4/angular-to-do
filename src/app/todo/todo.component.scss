@@ -1,5 +1,10 @@
 .form-wrapper{
   display: flex;
+  margin-bottom: 30px;
+  input[type='text']{
+    border-radius: 10px;
+  }
+  
 }
 
 .emptyState{
@@ -11,42 +16,63 @@
     font-size: 20px;color: black;
   }
 }
-.list-wrapper{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  .input-checkbox{
-    margin-right: 10px;
-  }
-  .item-title{
-    flex-grow: 1;
-  }
-  .completeTitle{
-    color: tomato;
-    text-decoration: line-through;
-    font-style: italic;
-    flex-grow: 1;
-  }
-  .label{
-    cursor: pointer;
-  }
-  .dropdown{
-    margin-right: 20%;
-    .buttton-wrapper{
-      display: flex;
-      justify-content: flex-end;
-      .btn{
-        width: 5em;
 
+.list-section{
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 50px 0px;
+  
+  .list-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0px 20px;
+    .input-checkbox{
+      margin-right: 10px;
+    }
+    .item-title{
+      flex-grow: 1;
+    }
+    .completeTitle{
+      color: black;
+      text-decoration: line-through;
+      font-style: italic;
+      flex-grow: 1;
+    }
+    .label{
+      cursor: pointer;
+    }
+    .dropdown{
+      margin-right: 20%;
+      .btn-check:active+.btn-outline-primary, .btn-check:checked+.btn-outline-primary, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show, .btn-outline-primary:active{
+
+        color: #fff;
+        background-color: #000000;
+        border-color: white;
+    }
+      .btn-outline-primary{
+        background-color: #fff;
+        color: black;
       }
-      .btn-light{
-        margin-left: 1em;
+      .buttton-wrapper{
+        display: flex;
+        justify-content: flex-end;
+        .btn{
+          width: 5em;
+  
+        }
+        .btn-light{
+          margin-left: 1em;
+        }
       }
     }
+    .del-icon{
+      color: grey;
+    }
+  
   }
-
-
 }
+
 
 .circle{
   height: 10px;
@@ -55,6 +81,7 @@
   margin-right: 0.5em;
 }
 .tag-section{
+  margin: 0px 20px;
   display: flex;
   .tag-wrapper {
     display: flex;
@@ -62,3 +89,23 @@
     margin-right: 10px;
   }
 }
+
+.btn-check:active+.btn-outline-primary, .btn-check:checked+.btn-outline-primary, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show, .btn-outline-primary:active{
+  background-color: #ffffff;
+  color: black;
+  outline: none;
+  border: none;
+}
+
+.btn-outline-primary{
+  border: none;
+  color: grey;
+}
+
+.btn-outline-primary:hover{
+  border: none;
+  background-color:#fff;
+  color: black
+}
+
+

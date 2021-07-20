@@ -1,23 +1,30 @@
 <form class="form-wrapper" (submit)="addItem()" #f="ngForm">
   <input type="text" placeholder="Add todos.." name="title" class="form-control" (change)="onInputValueChanged($event)" ngModel>
-  <div>
+  <!-- <div>
     <button type="submit" class="btn btn-success" [disabled]="!isInputValid">Submit</button>
-  </div>
+  </div> -->
 </form>
+
+
+<div class="btn-group mb-4" role="group" aria-label="Basic radio toggle button group" *ngIf="activeList.length > 0 || completedList.length > 0">
+  <div>
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" value="active" checked [(ngModel)]="activeTab">
+    <label class="btn btn-outline-primary" for="btnradio1">Active ({{activeList.length}})</label>
+  </div>
+  <div>
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" value="completed" autocomplete="off" [(ngModel)]="activeTab">
+    <label class="btn btn-outline-primary" for="btnradio2">Completed ({{completedList.length}})</label>
+  </div>
+ </div>
+
+<div class="list-section">
 
 <div class="emptyState" *ngIf=" activeList.length == 0 && completedList.length == 0">
   <fa-icon [icon]="faCheckCircle"></fa-icon> 
   <p class="emptyStateText">You don't have any to do list yet</p>
-
 </div>
 
-<div class="btn-group mt-4" role="group" aria-label="Basic radio toggle button group" *ngIf="activeList.length > 0 || completedList.length > 0">
-  <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" value="active" checked [(ngModel)]="activeTab">
-  <label class="btn btn-outline-primary" for="btnradio1">Active {{activeList.length}}</label>
 
-  <input type="radio" class="btn-check" name="btnradio" id="btnradio2" value="completed" autocomplete="off" [(ngModel)]="activeTab">
-  <label class="btn btn-outline-primary" for="btnradio2">Completed {{completedList.length}}</label>
-</div>
 
 
 <ng-container *ngIf="activeTab == 'active'">
@@ -34,8 +41,19 @@
           <input type="checkbox" [checked]="item.isDone" (change)="updateItem($event, i)">
         </div>
         <div class="item-title">{{item.title}}</div>
+     
+        <div (click)="removeItem(i)" class="del-icon"> <fa-icon [icon]="faTrashAlt"></fa-icon></div>
+      </div>
+      <div class="tag-section mt-2">
+        
+        <ng-container *ngIf="item.tag.length" >
+          <div class="tag-wrapper"  *ngFor="let tag of item.tag">
+            <div [style.background-color]="tag.color" class="circle"></div>
+            <div>{{tag.title}}</div>
+          </div>  
+        </ng-container>
         <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+          <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
            aria-expanded="false">
            Tag(s)
           </button>
@@ -52,7 +70,7 @@
                 </div>
                 <hr/>
                 <label class="label" for="create-task" (click)="createNewTag()">
-                  <fa-icon [icon]="faPlus"></fa-icon>  Create New Task
+                  <fa-icon [icon]="faPlus"></fa-icon>  Create New Tag
                 </label> 
                 <div *ngIf="isNewTag" class="mt-2">
                   <input type="text" placeholder="newTag" name="title" [(ngModel)]="newTag">
@@ -64,16 +82,10 @@
               </li>
           </ul>
         </div>
-        <button type="button" class="btn btn-danger" (click)="removeItem(i)">Delete</button>
       </div>
-      <div *ngIf="item.tag.length" class="tag-section mt-2">
-        <div class="tag-wrapper"  *ngFor="let tag of item.tag">
-          <div [style.background-color]="tag.color" class="circle"></div>
-          <div>{{tag.title}}</div>
-        </div>  
-      </div>
+      <hr/>
     </div>
-    <hr/>
+    
   
   </div>
 </ng-container>
@@ -90,7 +102,8 @@
           <input type="checkbox" [checked]="item.isDone" (change)="updateItem($event, i)">
         </div>
         <div class="completeTitle">{{item.title}}</div>
-        <button type="button" class="btn btn-danger" (click)="removeItem(i)">Delete</button>
+        <div (click)="removeItem(i)" class="del-icon"> <fa-icon [icon]="faTrashAlt"></fa-icon></div>
+        
       </div>
       <div *ngIf="item.tag.length" class="tag-section mt-2">
         <div class="tag-wrapper"  *ngFor="let tag of item.tag">
@@ -103,3 +116,4 @@
   </div>
 </ng-container>
 
+</div>

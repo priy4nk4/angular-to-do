@@ -1,4 +1,9 @@
-.container{
-  padding: 50px;
-  max-width: 575px;
+.wrapper{
+  background-color: #1EB76E;
+  height: 300px;
+  .container{
+    padding: 50px;
+    max-width: 575px;
+  }
+
 }
