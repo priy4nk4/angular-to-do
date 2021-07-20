@@ -1,39 +1,105 @@
 <form class="form-wrapper" (submit)="addItem()" #f="ngForm">
-  <input type="text" placeholder="add todos.." name="title" class="form-control" (change)="onInputValueChanged($event)" ngModel>
+  <input type="text" placeholder="Add todos.." name="title" class="form-control" (change)="onInputValueChanged($event)" ngModel>
   <div>
-    <button type="submit" class="btn btn-success" [disabled]="!isInputValid">submit</button>
+    <button type="submit" class="btn btn-success" [disabled]="!isInputValid">Submit</button>
   </div>
 </form>
 
-<div *ngIf="itemList.length">
-  <div *ngFor="let item of itemList; let i=index">
-    <div class="list-wrapper mt-4">
-      <input type="checkbox" [checked]="item.isDone" (change)="updateItem($event, i)">
-      <p [ngClass]="item.isDone? 'my_class1': 'my_class2'">{{item.title}}</p>
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle"
-                [ngClass]="item.tag== 'work'? 'work': (item.tag== 'important'? 'important': 'default') "
-                type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-          {{item.tag}}
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li><a class="dropdown-item" (click)="updateTag(i, tag.title)" *ngFor="let tag of tags">{{tag.title}}</a></li>
+<div class="emptyState" *ngIf=" activeList.length == 0 && completedList.length == 0">
+  <fa-icon [icon]="faCheckCircle"></fa-icon> 
+  <p class="emptyStateText">You don't have any to do list yet</p>
 
-        </ul>
-      </div>
-<!--      <button type="button" (click)="assignTask(item)">assign</button>-->
+</div>
 
-      <button type="button" class="btn btn-danger" (click)="removeItem(i)">Delete</button>
-    </div>
+<div class="btn-group mt-4" role="group" aria-label="Basic radio toggle button group" *ngIf="activeList.length > 0 || completedList.length > 0">
+  <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" value="active" checked [(ngModel)]="activeTab">
+  <label class="btn btn-outline-primary" for="btnradio1">Active {{activeList.length}}</label>
 
+  <input type="radio" class="btn-check" name="btnradio" id="btnradio2" value="completed" autocomplete="off" [(ngModel)]="activeTab">
+  <label class="btn btn-outline-primary" for="btnradio2">Completed {{completedList.length}}</label>
+</div>
+
+
+<ng-container *ngIf="activeTab == 'active'">
+  <div class="emptyState" *ngIf="activeList.length == 0 && completedList.length !=0">
+    <fa-icon [icon]="faCheckCircle"></fa-icon> 
+    <p class="emptyStateText">You don't have any to do list yet</p>
+  
   </div>
-  <hr/>
+  
+  <div *ngIf="activeList.length">
+    <div *ngFor="let item of activeList; let i=index">
+      <div class="list-wrapper mt-4">
+        <div class="input-checkbox">
+          <input type="checkbox" [checked]="item.isDone" (change)="updateItem($event, i)">
+        </div>
+        <div class="item-title">{{item.title}}</div>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+           aria-expanded="false">
+           Tag(s)
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" (click)="handleClick($event)" #dropdown>
+            <li>
+              <li class="p-2">
+                <div *ngFor="let tag of tags;let j=index" >  
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" [checked]="isTagged(tag, item)"  (change)="updateTag($event, i, tag)" id="flexCheckDefault{{j}}">
+                    <label class="form-check-label" for="flexCheckDefault{{j}}">
+                      {{tag.title}}
+                    </label>
+                  </div>
+                </div>
+                <hr/>
+                <label class="label" for="create-task" (click)="createNewTag()">
+                  <fa-icon [icon]="faPlus"></fa-icon>  Create New Task
+                </label> 
+                <div *ngIf="isNewTag" class="mt-2">
+                  <input type="text" placeholder="newTag" name="title" [(ngModel)]="newTag">
+                  <div class="mt-2 buttton-wrapper">
+                    <button class="btn btn-primary"  (click)="addNewTag()">Add</button>
+                    <button class="btn btn-light"  (click)="cancel()">Cancel</button>
+                  </div>
+                </div>
+              </li>
+          </ul>
+        </div>
+        <button type="button" class="btn btn-danger" (click)="removeItem(i)">Delete</button>
+      </div>
+      <div *ngIf="item.tag.length" class="tag-section mt-2">
+        <div class="tag-wrapper"  *ngFor="let tag of item.tag">
+          <div [style.background-color]="tag.color" class="circle"></div>
+          <div>{{tag.title}}</div>
+        </div>  
+      </div>
+    </div>
+    <hr/>
+  
+  </div>
+</ng-container>
 
-</div>
+<ng-container *ngIf="activeTab == 'completed'">
+  <div class="emptyState" *ngIf="completedList.length ==0 && activeList.length != 0">
+    <fa-icon [icon]="faCheckCircle"></fa-icon> 
+    <p class="emptyStateText">You don't have any to do list yet</p>
+  </div>
+  <div *ngIf="completedList.length">
+    <div *ngFor="let item of completedList; let i=index">
+      <div class="list-wrapper mt-4">
+        <div class="input-checkbox">
+          <input type="checkbox" [checked]="item.isDone" (change)="updateItem($event, i)">
+        </div>
+        <div class="completeTitle">{{item.title}}</div>
+        <button type="button" class="btn btn-danger" (click)="removeItem(i)">Delete</button>
+      </div>
+      <div *ngIf="item.tag.length" class="tag-section mt-2">
+        <div class="tag-wrapper"  *ngFor="let tag of item.tag">
+          <div [style.background-color]="tag.color" class="circle"></div>
+          <div>{{tag.title}}</div>
+        </div>  
+      </div>
+    </div>
+    <hr/>
+  </div>
+</ng-container>
 
-<div *ngIf ="completedTask.length">
-  <h2>Completed (Item)s</h2>
-  <ol>
-    <li  *ngFor="let item of completedTask">{{item.title}}</li>
-  </ol>
-</div>
